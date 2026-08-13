@@ -1,0 +1,3818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Indian Visa Management System By Next Step India </title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+    --bg:#f5f7fb;
+    --card:#ffffff;
+    --text:#172033;
+    --muted:#667085;
+    --border:#e5e7eb;
+    --danger:#dc2626;
+    --success:#15803d;
+    --warning:#b45309;
+    --sidebar:#111827;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+button,input,select,textarea{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* LOGIN */
+
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:linear-gradient(135deg,#eff6ff,#f8fafc);
+}
+
+.login-box{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:35px;
+    box-shadow:0 15px 40px rgba(0,0,0,.08);
+}
+
+.login-logo{
+    text-align:center;
+    margin-bottom:28px;
+}
+
+.login-icon{
+    width:65px;
+    height:65px;
+    margin:auto;
+    display:grid;
+    place-items:center;
+    background:#dbeafe;
+    border-radius:16px;
+    font-size:32px;
+}
+
+.login-logo h1{
+    font-size:23px;
+    margin-top:14px;
+}
+
+.login-logo p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:6px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    margin-bottom:16px;
+}
+
+.form-group label{
+    font-size:13px;
+    font-weight:600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:11px 12px;
+    outline:none;
+    background:#fff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    border-color:var(--primary);
+}
+
+.btn{
+    border:0;
+    border-radius:8px;
+    padding:10px 15px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:#fff;
+}
+
+.btn-primary:hover{
+    background:var(--primary-dark);
+}
+
+.btn-secondary{
+    background:#eef2f7;
+    color:#344054;
+}
+
+.btn-danger{
+    background:#fee2e2;
+    color:var(--danger);
+}
+
+.btn-success{
+    background:#dcfce7;
+    color:var(--success);
+}
+
+.btn-small{
+    padding:7px 10px;
+    font-size:12px;
+}
+
+/* APP */
+
+#app{
+    display:none;
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:250px;
+    background:var(--sidebar);
+    color:#fff;
+    padding:22px 16px;
+    z-index:20;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 8px 28px;
+}
+
+.logo-icon{
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    background:var(--primary);
+    display:grid;
+    place-items:center;
+    font-size:21px;
+}
+
+.logo h2{
+    font-size:17px;
+}
+
+.logo small{
+    color:#9ca3af;
+    font-size:11px;
+}
+
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.nav button{
+    border:0;
+    background:transparent;
+    color:#d1d5db;
+    text-align:left;
+    padding:13px 14px;
+    border-radius:8px;
+    font-size:14px;
+}
+
+.nav button:hover,
+.nav button.active{
+    background:#1f2937;
+    color:#fff;
+}
+
+.logout-btn{
+    position:absolute;
+    left:16px;
+    right:16px;
+    bottom:20px;
+    background:#7f1d1d!important;
+    color:#fecaca!important;
+}
+
+.main{
+    margin-left:250px;
+    min-height:100vh;
+}
+
+.topbar{
+    height:70px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+}
+
+.topbar h1{
+    font-size:21px;
+}
+
+.admin{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+}
+
+.avatar{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#dbeafe;
+    color:var(--primary);
+    display:grid;
+    place-items:center;
+    font-weight:bold;
+}
+
+.content{
+    padding:28px;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:15px;
+    margin-bottom:24px;
+}
+
+.stat{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:19px;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.stat-value{
+    font-size:26px;
+    font-weight:700;
+}
+
+/* CARD */
+
+.card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:22px;
+    margin-bottom:20px;
+}
+
+.card-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.card-title h2{
+    font-size:17px;
+}
+
+/* TOOLBAR */
+
+.toolbar{
+    display:flex;
+    gap:10px;
+    margin-bottom:18px;
+}
+
+.search{
+    flex:1;
+}
+
+.search input,
+.toolbar select{
+    width:100%;
+    height:42px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:0 12px;
+    outline:none;
+    background:#fff;
+}
+
+/* TABLE */
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:13px 10px;
+    border-bottom:1px solid var(--border);
+    text-align:left;
+    font-size:13px;
+    white-space:nowrap;
+}
+
+th{
+    color:var(--muted);
+    background:#fafafa;
+}
+
+.actions{
+    display:flex;
+    gap:5px;
+}
+
+.action-btn{
+    border:0;
+    background:#f1f5f9;
+    border-radius:6px;
+    padding:7px 9px;
+    font-size:12px;
+}
+
+/* STATUS */
+
+.status{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.pending{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.uploaded{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
+.submitted{
+    background:#ede9fe;
+    color:#6d28d9;
+}
+
+.requested{
+    background:#cffafe;
+    color:#0e7490;
+}
+
+.confirmed{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.completed{
+    background:#e5e7eb;
+    color:#374151;
+}
+
+/* FORM */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+.type-selector{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:22px;
+}
+
+.type-option{
+    border:2px solid var(--border);
+    padding:16px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.type-option.active{
+    border-color:var(--primary);
+    background:#eff6ff;
+}
+
+.type-option input{
+    display:none;
+}
+
+.type-option strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+.type-option small{
+    color:var(--muted);
+}
+
+.family-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#f8fafc;
+    border:1px solid var(--border);
+    padding:14px;
+    border-radius:9px;
+    margin-bottom:15px;
+}
+
+.member-card{
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+.member-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:17px;
+}
+
+.member-title h3{
+    font-size:15px;
+}
+
+.member-number{
+    background:#dbeafe;
+    color:var(--primary);
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+/* UPLOAD */
+
+.upload-area{
+    border:2px dashed #cbd5e1;
+    border-radius:10px;
+    padding:25px;
+    text-align:center;
+    background:#f8fafc;
+}
+
+.upload-area:hover{
+    border-color:var(--primary);
+    background:#eff6ff;
+}
+
+.upload-area strong{
+    display:block;
+    margin-bottom:6px;
+}
+
+.upload-area span{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.file-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px;
+    background:#f8fafc;
+    border:1px solid var(--border);
+    border-radius:7px;
+    margin-top:7px;
+    font-size:12px;
+}
+
+/* MODAL */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.55);
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:1000px;
+    max-height:90vh;
+    overflow-y:auto;
+    background:#fff;
+    border-radius:14px;
+    padding:25px;
+}
+
+.modal-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.close{
+    border:0;
+    background:transparent;
+    font-size:25px;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#111827;
+    color:#fff;
+    padding:13px 18px;
+    border-radius:8px;
+    font-size:13px;
+    opacity:0;
+    transform:translateY(80px);
+    transition:.3s;
+    z-index:300;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.empty{
+    text-align:center;
+    padding:45px;
+    color:var(--muted);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1200px){
+
+    .stats{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
+
+@media(max-width:800px){
+
+    .sidebar{
+        width:70px;
+        padding:15px 10px;
+    }
+
+    .logo h2,
+    .logo small,
+    .nav span{
+        display:none;
+    }
+
+    .logo{
+        justify-content:center;
+    }
+
+    .main{
+        margin-left:70px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+}
+
+@media(max-width:550px){
+
+    .content{
+        padding:15px;
+    }
+
+    .topbar{
+        padding:0 15px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .type-selector{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+/* Print / Process enhancements */
+.action-row{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+.process-timeline{display:grid;grid-template-columns:repeat(6,minmax(120px,1fr));gap:10px;margin-top:20px}
+.process-step{border:1px solid var(--border);border-radius:12px;padding:14px 10px;background:#fff;min-height:105px}
+.process-step .step-no{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#e5e7eb;color:#374151;font-weight:700;margin-bottom:8px}
+.process-step.active{border-color:var(--primary);box-shadow:0 0 0 2px rgba(37,99,235,.08)}
+.process-step.active .step-no{background:var(--primary);color:#fff}
+.process-step.done .step-no{background:var(--success);color:#fff}
+.process-step small{color:var(--muted);display:block;line-height:1.4}
+@media(max-width:900px){.process-timeline{grid-template-columns:repeat(2,minmax(150px,1fr))}}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+LOGIN
+===================================================== -->
+
+<div id="loginPage">
+
+    <div class="login-box">
+
+        <div class="login-logo">
+
+            <div class="login-icon">🇮🇳</div>
+
+            <h1> Indian Visa Management System By Next Step India </h1>
+
+            <p>Agency Login</p>
+
+        </div>
+
+
+        <form id="loginForm">
+
+            <div class="form-group">
+
+                <label>Email</label>
+
+                <input
+                    id="loginEmail"
+                    type="email"
+                    placeholder="Admin email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Password</label>
+
+                <input
+                    id="loginPassword"
+                    type="password"
+                    placeholder="Password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                id="loginButton"
+                class="btn btn-primary"
+                style="width:100%"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <p
+            id="loginError"
+            style="
+                color:#dc2626;
+                font-size:12px;
+                margin-top:15px;
+                text-align:center;
+            "
+        ></p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+APPLICATION
+===================================================== -->
+
+<div id="app">
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <div class="logo-icon">🇮🇳</div>
+
+        <div>
+            <h2>Indian Visa</h2>
+            <small>Slot Booking</small>
+        </div>
+
+    </div>
+
+
+    <nav class="nav">
+
+        <button
+            class="active"
+            onclick="showSection('dashboard',this)"
+        >
+            📊 <span>Dashboard</span>
+        </button>
+
+
+        <button
+            onclick="showSection('applications',this)"
+        >
+            📋 <span>Applications</span>
+        </button>
+
+
+        <button
+            onclick="openNewApplication()"
+        >
+            ➕ <span>New Application</span>
+        </button>
+
+
+        <button
+            onclick="showSection('process',this)"
+        >
+            🔄 <span>Process</span>
+        </button>
+
+
+        <button
+            class="logout-btn"
+            onclick="logout()"
+        >
+            🚪 <span>Logout</span>
+        </button>
+
+    </nav>
+
+</aside>
+
+
+<main class="main">
+
+<header class="topbar">
+
+    <h1 id="pageTitle">Dashboard</h1>
+
+    <div class="admin">
+
+        <span id="adminEmail"></span>
+
+        <div class="avatar">A</div>
+
+    </div>
+
+</header>
+
+
+<div class="content">
+
+
+<!-- DASHBOARD -->
+
+<section id="dashboard">
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-label">
+                Total Families
+            </div>
+            <div
+                class="stat-value"
+                id="familyCount"
+            >0</div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                Total Applicants
+            </div>
+            <div
+                class="stat-value"
+                id="applicantCount"
+            >0</div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                Pending
+            </div>
+            <div
+                class="stat-value"
+                id="pendingCount"
+            >0</div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                Documents Uploaded
+            </div>
+            <div
+                class="stat-value"
+                id="uploadedCount"
+            >0</div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                Slot Requested
+            </div>
+            <div
+                class="stat-value"
+                id="slotCount"
+            >0</div>
+        </div>
+
+
+        <div class="stat">
+            <div class="stat-label">
+                Completed
+            </div>
+            <div
+                class="stat-value"
+                id="completedCount"
+            >0</div>
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-title">
+
+            <h2>Recent Applications</h2>
+
+            <button
+                class="btn btn-primary"
+                onclick="openNewApplication()"
+            >
+                + New Application
+            </button>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Family ID</th>
+                        <th>Main Applicant</th>
+                        <th>Members</th>
+                        <th>Visa</th>
+                        <th>Appointment</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="recentTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- APPLICATIONS -->
+
+<section
+    id="applications"
+    style="display:none"
+>
+
+<div class="card">
+
+    <div class="card-title">
+
+        <h2>Applications</h2>
+
+        <button
+            class="btn btn-primary"
+            onclick="openNewApplication()"
+        >
+            + New Application
+        </button>
+
+    </div>
+
+
+    <div class="toolbar">
+
+        <div class="search">
+
+            <input
+                id="searchInput"
+                placeholder="Search Family ID, name, passport..."
+                oninput="renderApplications()"
+            >
+
+        </div>
+
+
+        <select
+            id="statusFilter"
+            onchange="renderApplications()"
+        >
+
+            <option value="">
+                All Status
+            </option>
+
+            <option>Pending</option>
+
+            <option>Documents Uploaded</option>
+
+            <option>Application Submitted</option>
+
+            <option>Slot Requested</option>
+
+            <option>Slot Confirmed</option>
+
+            <option>Completed</option>
+
+        </select>
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Family ID</th>
+                    <th>Main Applicant</th>
+                    <th>Members</th>
+                    <th>Passport</th>
+                    <th>Visa</th>
+                    <th>Appointment</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="applicationsTable"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ADD APPLICATION -->
+
+<section
+    id="addApplication"
+    style="display:none"
+>
+
+<div class="card">
+
+    <div class="card-title">
+
+        <h2 id="formTitle">
+            New Visa Application
+        </h2>
+
+    </div>
+
+
+    <div class="type-selector">
+
+        <label
+            class="type-option active"
+            id="individualOption"
+        >
+
+            <input
+                type="radio"
+                name="applicationType"
+                value="Individual"
+                checked
+                onchange="changeType('Individual')"
+            >
+
+            <strong>
+                👤 Individual Applicant
+            </strong>
+
+            <small>
+                One applicant.
+            </small>
+
+        </label>
+
+
+        <label
+            class="type-option"
+            id="familyOption"
+        >
+
+            <input
+                type="radio"
+                name="applicationType"
+                value="Family"
+                onchange="changeType('Family')"
+            >
+
+            <strong>
+                👨‍👩‍👧‍👦 Family / Group
+            </strong>
+
+            <small>
+                Multiple applicants under one Family ID.
+            </small>
+
+        </label>
+
+    </div>
+
+
+    <form id="applicationForm">
+
+        <input
+            type="hidden"
+            id="editingId"
+        >
+
+
+        <div class="family-header">
+
+            <strong>
+                Application Information
+            </strong>
+
+            <strong
+                id="familyIdDisplay"
+                style="color:#2563eb"
+            >
+                New Application
+            </strong>
+
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Visa Center</label>
+
+                <select id="visaCenter">
+
+                    <option value="">
+                        Select center
+                    </option>
+
+                    <option>Dhaka</option>
+                    <option>Chittagong</option>
+                    <option>Rajshahi</option>
+                    <option>Sylhet</option>
+                    <option>Khulna</option>
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Appointment Date
+                </label>
+
+                <input
+                    type="date"
+                    id="slotDate"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Appointment Time
+                </label>
+
+                <input
+                    type="time"
+                    id="slotTime"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Status</label>
+
+                <select id="status">
+
+                    <option>Pending</option>
+
+                    <option>
+                        Documents Uploaded
+                    </option>
+
+                    <option>
+                        Application Submitted
+                    </option>
+
+                    <option>
+                        Slot Requested
+                    </option>
+
+                    <option>
+                        Slot Confirmed
+                    </option>
+
+                    <option>Completed</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="family-header"
+            style="margin-top:20px"
+        >
+
+            <strong>
+                Applicants
+            </strong>
+
+            <button
+                type="button"
+                id="addMemberBtn"
+                class="btn btn-primary btn-small"
+                onclick="addMember()"
+                style="display:none"
+            >
+                + Add Family Member
+            </button>
+
+        </div>
+
+
+        <div id="membersContainer"></div>
+
+
+        <div class="form-group">
+
+            <label>
+                Notes
+            </label>
+
+            <textarea
+                id="notes"
+                placeholder="Additional notes..."
+            ></textarea>
+
+        </div>
+
+
+        <div style="display:flex;gap:10px">
+
+            <button
+                class="btn btn-primary"
+                type="submit"
+            >
+                Save Application
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="resetForm()"
+            >
+                Reset
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+</section>
+
+
+<!-- PROCESS -->
+<section id="process" style="display:none">
+<div class="card">
+    <div class="card-title"><h2>Application Process</h2></div>
+    <p style="color:#667085;font-size:13px">
+        Track every application from registration to completion.
+    </p>
+    <div class="process-timeline">
+        <div class="process-step done"><div class="step-no">1</div><strong>Registration</strong><small>Create individual or family application.</small></div>
+        <div class="process-step"><div class="step-no">2</div><strong>Documents</strong><small>Upload applicant PDF documents.</small></div>
+        <div class="process-step"><div class="step-no">3</div><strong>Submitted</strong><small>Application submitted for processing.</small></div>
+        <div class="process-step"><div class="step-no">4</div><strong>Slot Requested</strong><small>Appointment/slot request recorded.</small></div>
+        <div class="process-step"><div class="step-no">5</div><strong>Slot Confirmed</strong><small>Confirmed appointment information.</small></div>
+        <div class="process-step"><div class="step-no">6</div><strong>Completed</strong><small>Application process completed.</small></div>
+    </div>
+    <div style="margin-top:25px">
+        <h3 style="margin-bottom:10px">Status workflow</h3>
+        <p style="color:#667085;font-size:13px;line-height:1.6">
+            Pending → Documents Uploaded → Application Submitted →
+            Slot Requested → Slot Confirmed → Completed
+        </p>
+    </div>
+</div>
+</section>
+
+</div>
+</main>
+
+</div>
+
+
+<!-- DETAILS MODAL -->
+
+<div
+    class="modal"
+    id="detailsModal"
+>
+
+<div class="modal-box">
+
+    <div class="modal-header">
+
+        <h2>
+            Application Details
+        </h2>
+
+        <button
+            class="close"
+            onclick="closeModal()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div id="detailsContent"></div>
+
+</div>
+
+</div>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+/* =====================================================
+SUPABASE CONFIG
+===================================================== */
+
+const SUPABASE_URL =
+"https://upxcraqxfkjqhadqmwsi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_CAe0opHdXTyLuC-Ejq0GfA_-G2NGZQm";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =====================================================
+STATE
+===================================================== */
+
+let members = [];
+
+let selectedFiles = {};
+
+
+/* =====================================================
+START
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        setupLogin();
+
+        const {
+            data
+        } =
+        await supabaseClient.auth.getSession();
+
+
+        if (
+            data &&
+            data.session
+        ){
+
+            showApp(
+                data.session.user
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+AUTH
+===================================================== */
+
+function setupLogin(){
+
+    document
+    .getElementById("loginForm")
+    .addEventListener(
+        "submit",
+        login
+    );
+
+
+    supabaseClient.auth.onAuthStateChange(
+        async (event,session)=>{
+
+            if(session){
+
+                showApp(
+                    session.user
+                );
+
+            }else{
+
+                showLogin();
+
+            }
+
+        }
+    );
+
+}
+
+
+async function login(event){
+
+    event.preventDefault();
+
+
+    const email =
+        document
+        .getElementById("loginEmail")
+        .value
+        .trim();
+
+
+    const password =
+        document
+        .getElementById("loginPassword")
+        .value;
+
+
+    const button =
+        document
+        .getElementById("loginButton");
+
+
+    const error =
+        document
+        .getElementById("loginError");
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Logging in...";
+
+    error.textContent = "";
+
+
+    const {
+        data,
+        error:loginError
+    } =
+    await supabaseClient.auth.signInWithPassword({
+
+        email:email,
+
+        password:password
+
+    });
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "Login";
+
+
+    if(loginError){
+
+        error.textContent =
+            loginError.message;
+
+        return;
+
+    }
+
+
+    showApp(
+        data.user
+    );
+
+}
+
+
+async function logout(){
+
+    await supabaseClient.auth.signOut();
+
+    showLogin();
+
+}
+
+
+function showLogin(){
+
+    document
+    .getElementById("loginPage")
+    .style.display = "flex";
+
+
+    document
+    .getElementById("app")
+    .style.display = "none";
+
+}
+
+
+async function showApp(user){
+
+    document
+    .getElementById("loginPage")
+    .style.display = "none";
+
+
+    document
+    .getElementById("app")
+    .style.display = "block";
+
+
+    document
+    .getElementById("adminEmail")
+    .textContent =
+        user.email || "";
+
+
+    await refreshDashboard();
+
+}
+
+
+/* =====================================================
+NAVIGATION
+===================================================== */
+
+function showSection(section,button){
+
+    [
+        "dashboard",
+        "applications",
+        "addApplication",
+        "process"
+    ]
+    .forEach(id=>{
+
+        document
+        .getElementById(id)
+        .style.display =
+            id===section
+            ? "block"
+            : "none";
+
+    });
+
+
+    document
+    .querySelectorAll(".nav button")
+    .forEach(btn=>
+        btn.classList.remove("active")
+    );
+
+
+    if(button){
+
+        button.classList.add("active");
+
+    }
+
+
+    const titles={
+
+        dashboard:"Dashboard",
+
+        applications:"Applications",
+
+        addApplication:"New Application",
+
+        process:"Application Process"
+
+    };
+
+
+    document
+    .getElementById("pageTitle")
+    .textContent =
+        titles[section];
+
+
+    if(section==="dashboard"){
+
+        refreshDashboard();
+
+    }
+
+
+    if(section==="applications"){
+
+        renderApplications();
+
+    }
+
+}
+
+
+/* =====================================================
+NEW APPLICATION
+===================================================== */
+
+function openNewApplication(){
+
+    resetForm();
+
+
+    const button =
+        [...document.querySelectorAll(".nav button")]
+        .find(
+            b =>
+            b.textContent.includes("New Application")
+        );
+
+
+    showSection(
+        "addApplication",
+        button
+    );
+
+}
+
+
+/* =====================================================
+TYPE
+===================================================== */
+
+function changeType(type){
+
+    const individual =
+        document
+        .getElementById("individualOption");
+
+
+    const family =
+        document
+        .getElementById("familyOption");
+
+
+    individual.classList.remove("active");
+
+    family.classList.remove("active");
+
+
+    if(type==="Family"){
+
+        family.classList.add("active");
+
+        document
+        .getElementById("addMemberBtn")
+        .style.display="block";
+
+    }else{
+
+        individual.classList.add("active");
+
+        document
+        .getElementById("addMemberBtn")
+        .style.display="none";
+
+    }
+
+
+    if(members.length===0){
+
+        addMember();
+
+    }
+
+}
+
+
+/* =====================================================
+MEMBERS
+===================================================== */
+
+function addMember(data=null){
+
+    const id =
+        crypto.randomUUID();
+
+
+    members.push({
+
+        id:id,
+
+        name:data?.name || "",
+
+        passport:data?.passport || "",
+
+        dob:data?.dob || "",
+
+        mobile:data?.mobile || "",
+
+        email:data?.email || "",
+
+        visa_type:data?.visa_type || "",
+
+        existingId:data?.id || null,
+
+        documents:data?.documents || []
+
+    });
+
+
+    selectedFiles[id]=[];
+
+    renderMembers();
+
+}
+
+
+function removeMember(id){
+
+    if(members.length<=1){
+
+        toast(
+            "At least one applicant is required."
+        );
+
+        return;
+
+    }
+
+
+    members =
+        members.filter(
+            m=>m.id!==id
+        );
+
+
+    delete selectedFiles[id];
+
+    renderMembers();
+
+}
+
+
+function updateMember(
+    id,
+    field,
+    value
+){
+
+    const member =
+        members.find(
+            m=>m.id===id
+        );
+
+
+    if(member){
+
+        member[field]=value;
+
+    }
+
+}
+
+
+/* =====================================================
+RENDER MEMBERS
+===================================================== */
+
+function renderMembers(){
+
+    const container =
+        document
+        .getElementById("membersContainer");
+
+
+    container.innerHTML="";
+
+
+    members.forEach(
+        (member,index)=>{
+
+            const card =
+                document.createElement("div");
+
+
+            card.className =
+                "member-card";
+
+
+            card.innerHTML=`
+
+                <div class="member-title">
+
+                    <div>
+
+                        <span class="member-number">
+                            MEMBER ${index+1}
+                        </span>
+
+                        <h3 style="margin-top:8px">
+                            Applicant Details
+                        </h3>
+
+                    </div>
+
+                    ${
+                        members.length>1
+                        ?
+                        `
+                        <button
+                            type="button"
+                            class="btn btn-danger btn-small"
+                            onclick="removeMember('${member.id}')"
+                        >
+                            Remove
+                        </button>
+                        `
+                        :""
+                    }
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            Full Name *
+                        </label>
+
+                        <input
+                            value="${esc(member.name)}"
+                            oninput="
+                            updateMember(
+                                '${member.id}',
+                                'name',
+                                this.value
+                            )"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Passport Number *
+                        </label>
+
+                        <input
+                            value="${esc(member.passport)}"
+                            oninput="
+                            updateMember(
+                                '${member.id}',
+                                'passport',
+                                this.value
+                            )"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Date of Birth
+                        </label>
+
+                        <input
+                            type="date"
+                            value="${esc(member.dob)}"
+                            onchange="
+                            updateMember(
+                                '${member.id}',
+                                'dob',
+                                this.value
+                            )"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Mobile
+                        </label>
+
+                        <input
+                            value="${esc(member.mobile)}"
+                            oninput="
+                            updateMember(
+                                '${member.id}',
+                                'mobile',
+                                this.value
+                            )"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            value="${esc(member.email)}"
+                            oninput="
+                            updateMember(
+                                '${member.id}',
+                                'email',
+                                this.value
+                            )"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Visa Type *
+                        </label>
+
+                        <select
+                            onchange="
+                            updateMember(
+                                '${member.id}',
+                                'visa_type',
+                                this.value
+                            )"
+                            required
+                        >
+
+                            <option value="">
+                                Select visa
+                            </option>
+
+                            ${visaOptions(member.visa_type)}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group full">
+
+                        <label>
+                            PDF Documents
+                        </label>
+
+
+                        <div
+                            class="upload-area"
+                            onclick="
+                            document
+                            .getElementById(
+                                'file_${member.id}'
+                            ).click()
+                            "
+                        >
+
+                            <strong>
+                                📄 Click to upload PDF
+                            </strong>
+
+                            <span>
+                                PDF only • Maximum 10 MB per file
+                            </span>
+
+
+                            <input
+                                id="file_${member.id}"
+                                type="file"
+                                accept=".pdf,application/pdf"
+                                multiple
+                                hidden
+                                onchange="
+                                handleFiles(
+                                    event,
+                                    '${member.id}'
+                                )"
+                            >
+
+                        </div>
+
+
+                        <div
+                            id="files_${member.id}"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(card);
+
+
+            renderFiles(member.id);
+
+        }
+    );
+
+}
+
+
+function visaOptions(selected){
+
+    const options=[
+
+        "Tourist",
+        "Business",
+        "Medical",
+        "Student",
+        "Employment",
+        "Entry",
+        "Conference",
+        "Other"
+
+    ];
+
+
+    return options.map(
+        x=>`
+
+        <option
+            value="${x}"
+            ${selected===x?"selected":""}
+        >
+            ${x}
+        </option>
+
+        `
+    ).join("");
+
+}
+
+
+/* =====================================================
+FILES
+===================================================== */
+
+function handleFiles(
+    event,
+    memberId
+){
+
+    const files =
+        [...event.target.files];
+
+
+    if(!selectedFiles[memberId]){
+
+        selectedFiles[memberId]=[];
+
+    }
+
+
+    files.forEach(file=>{
+
+        if(
+            file.type!=="application/pdf" &&
+            !file.name.toLowerCase().endsWith(".pdf")
+        ){
+
+            toast(
+                file.name+
+                ": PDF only"
+            );
+
+            return;
+
+        }
+
+
+        if(
+            file.size >
+            10*1024*1024
+        ){
+
+            toast(
+                file.name+
+                ": Maximum 10 MB"
+            );
+
+            return;
+
+        }
+
+
+        selectedFiles[memberId]
+        .push(file);
+
+    });
+
+
+    renderFiles(memberId);
+
+}
+
+
+function renderFiles(memberId){
+
+    const container =
+        document
+        .getElementById(
+            `files_${memberId}`
+        );
+
+
+    if(!container)return;
+
+
+    const member =
+        members.find(
+            m=>m.id===memberId
+        );
+
+
+    const newFiles =
+        selectedFiles[memberId] || [];
+
+
+    let html="";
+
+
+    if(member?.documents){
+
+        member.documents.forEach(
+            doc=>{
+
+                html+=`
+
+                <div class="file-item">
+
+                    <span>
+                        📄 ${esc(doc.file_name)}
+                    </span>
+
+                    <span>
+                        Saved
+                    </span>
+
+                </div>
+
+                `;
+
+            }
+        );
+
+    }
+
+
+    newFiles.forEach(
+        (file,index)=>{
+
+            html+=`
+
+            <div class="file-item">
+
+                <span>
+                    📄 ${esc(file.name)}
+                </span>
+
+                <button
+                    type="button"
+                    class="btn btn-danger btn-small"
+                    onclick="
+                    removeNewFile(
+                        '${memberId}',
+                        ${index}
+                    )"
+                >
+                    Remove
+                </button>
+
+            </div>
+
+            `;
+
+        }
+    );
+
+
+    container.innerHTML=html;
+
+}
+
+
+function removeNewFile(
+    memberId,
+    index
+){
+
+    selectedFiles[memberId]
+    .splice(index,1);
+
+    renderFiles(memberId);
+
+}
+
+
+/* =====================================================
+SAVE APPLICATION
+===================================================== */
+
+document
+.getElementById("applicationForm")
+.addEventListener(
+    "submit",
+    async event=>{
+
+        event.preventDefault();
+
+
+        for(
+            const member
+            of members
+        ){
+
+            if(
+                !member.name.trim() ||
+                !member.passport.trim() ||
+                !member.visa_type
+            ){
+
+                toast(
+                    "Please complete all required applicant fields."
+                );
+
+                return;
+
+            }
+
+        }
+
+
+        const editingId =
+            document
+            .getElementById("editingId")
+            .value;
+
+
+        const type =
+            document
+            .querySelector(
+                'input[name="applicationType"]:checked'
+            ).value;
+
+
+        const familyId =
+            editingId
+            ?
+            document
+            .getElementById("familyIdDisplay")
+            .textContent
+            :
+            generateFamilyId();
+
+
+        let applicationId =
+            editingId;
+
+
+        try{
+
+            /* APPLICATION */
+
+            if(editingId){
+
+                const {
+                    error
+                } =
+                await supabaseClient
+                .from("applications")
+                .update({
+
+                    application_type:type,
+
+                    visa_center:
+                        value("visaCenter"),
+
+                    slot_date:
+                        value("slotDate") || null,
+
+                    slot_time:
+                        value("slotTime") || null,
+
+                    status:
+                        value("status"),
+
+                    notes:
+                        value("notes"),
+
+                    updated_at:
+                        new Date().toISOString()
+
+                })
+                .eq(
+                    "id",
+                    editingId
+                );
+
+
+                if(error)throw error;
+
+            }else{
+
+                const {
+                    data,
+                    error
+                } =
+                await supabaseClient
+                .from("applications")
+                .insert({
+
+                    family_id:familyId,
+
+                    application_type:type,
+
+                    visa_center:
+                        value("visaCenter"),
+
+                    slot_date:
+                        value("slotDate") || null,
+
+                    slot_time:
+                        value("slotTime") || null,
+
+                    status:
+                        value("status"),
+
+                    notes:
+                        value("notes")
+
+                })
+                .select()
+                .single();
+
+
+                if(error)throw error;
+
+
+                applicationId =
+                    data.id;
+
+            }
+
+
+            /* MEMBERS */
+
+            if(editingId){
+
+                const {
+                    error
+                } =
+                await supabaseClient
+                .from("applicants")
+                .delete()
+                .eq(
+                    "application_id",
+                    applicationId
+                );
+
+
+                if(error)throw error;
+
+            }
+
+
+            for(
+                let i=0;
+                i<members.length;
+                i++
+            ){
+
+                const member =
+                    members[i];
+
+
+                const {
+                    data:applicant,
+                    error:memberError
+                } =
+                await supabaseClient
+                .from("applicants")
+                .insert({
+
+                    application_id:
+                        applicationId,
+
+                    applicant_number:
+                        i+1,
+
+                    name:
+                        member.name.trim(),
+
+                    passport:
+                        member.passport.trim(),
+
+                    dob:
+                        member.dob || null,
+
+                    mobile:
+                        member.mobile.trim(),
+
+                    email:
+                        member.email.trim(),
+
+                    visa_type:
+                        member.visa_type
+
+                })
+                .select()
+                .single();
+
+
+                if(memberError)
+                    throw memberError;
+
+
+                /* UPLOAD FILES */
+
+                const files =
+                    selectedFiles[
+                        member.id
+                    ] || [];
+
+
+                for(
+                    const file
+                    of files
+                ){
+
+                    const path =
+                        `${familyId}/${applicant.id}/${Date.now()}_${safeFileName(file.name)}`;
+
+
+                    const {
+                        error:uploadError
+                    } =
+                    await supabaseClient
+                    .storage
+                    .from("visa-documents")
+                    .upload(
+                        path,
+                        file,
+                        {
+                            contentType:
+                                "application/pdf",
+                            upsert:false
+                        }
+                    );
+
+
+                    if(uploadError)
+                        throw uploadError;
+
+
+                    const {
+                        error:docError
+                    } =
+                    await supabaseClient
+                    .from("documents")
+                    .insert({
+
+                        applicant_id:
+                            applicant.id,
+
+                        file_name:
+                            file.name,
+
+                        storage_path:
+                            path,
+
+                        file_size:
+                            file.size,
+
+                        mime_type:
+                            file.type
+
+                    });
+
+
+                    if(docError)
+                        throw docError;
+
+                }
+
+            }
+
+
+            toast(
+                editingId
+                ?
+                "Application updated successfully."
+                :
+                "Application saved successfully."
+            );
+
+
+            resetForm();
+
+
+            showSection(
+                "applications",
+                document
+                .querySelectorAll(".nav button")[1]
+            );
+
+
+        }catch(error){
+
+            console.error(error);
+
+            toast(
+                error.message ||
+                "Something went wrong."
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+APPLICATION LIST
+===================================================== */
+
+async function getApplications(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("applications")
+    .select(`
+        *,
+        applicants (
+            id,
+            applicant_number,
+            name,
+            passport,
+            dob,
+            mobile,
+            email,
+            visa_type
+        )
+    `)
+    .order(
+        "created_at",
+        {ascending:false}
+    );
+
+
+    if(error){
+
+        console.error(error);
+
+        toast(error.message);
+
+        return [];
+
+    }
+
+
+    return data || [];
+
+}
+
+
+async function renderApplications(){
+
+    const applications =
+        await getApplications();
+
+
+    const search =
+        (
+            document
+            .getElementById("searchInput")
+            ?.value || ""
+        )
+        .toLowerCase()
+        .trim();
+
+
+    const status =
+        document
+        .getElementById("statusFilter")
+        ?.value || "";
+
+
+    const filtered =
+        applications.filter(
+            app=>{
+
+                const membersText =
+                    (app.applicants || [])
+                    .map(
+                        m=>
+                        `${m.name} ${m.passport}`
+                    )
+                    .join(" ");
+
+
+                const text =
+                    `${app.family_id} ${membersText}`
+                    .toLowerCase();
+
+
+                return(
+                    (!search ||
+                    text.includes(search))
+                    &&
+                    (!status ||
+                    app.status===status)
+                );
+
+            }
+        );
+
+
+    const table =
+        document
+        .getElementById(
+            "applicationsTable"
+        );
+
+
+    table.innerHTML="";
+
+
+    if(!filtered.length){
+
+        table.innerHTML=`
+
+            <tr>
+                <td colspan="8">
+                    <div class="empty">
+                        No applications found.
+                    </div>
+                </td>
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(
+        app=>{
+
+            const main =
+                app.applicants?.[0];
+
+
+            const tr =
+                document.createElement("tr");
+
+
+            tr.innerHTML=`
+
+                <td>
+                    <strong>
+                        ${esc(app.family_id)}
+                    </strong>
+                </td>
+
+                <td>
+                    ${esc(main?.name || "-")}
+                </td>
+
+                <td>
+                    ${app.applicants?.length || 0}
+                </td>
+
+                <td>
+                    ${esc(main?.passport || "-")}
+                </td>
+
+                <td>
+                    ${esc(main?.visa_type || "-")}
+                </td>
+
+                <td>
+                    ${esc(
+                        app.slot_date || "-"
+                    )}
+                    ${esc(
+                        app.slot_time || ""
+                    )}
+                </td>
+
+                <td>
+                    ${statusBadge(app.status)}
+                </td>
+
+                <td>
+
+                    <div class="actions">
+
+                        <button
+                            class="action-btn"
+                            onclick="
+                            viewApplication(
+                                '${app.id}'
+                            )"
+                        >
+                            👁
+                        </button>
+
+                        <button
+                            class="action-btn"
+                            onclick="
+                            editApplication(
+                                '${app.id}'
+                            )"
+                        >
+                            ✏️
+                        </button>
+
+                        <button
+                            class="action-btn"
+                            onclick="
+                            deleteApplication(
+                                '${app.id}'
+                            )"
+                        >
+                            🗑
+                        </button>
+
+                    </div>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(tr);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+VIEW APPLICATION
+===================================================== */
+
+async function viewApplication(id){
+
+    const {
+        data:app,
+        error
+    } =
+    await supabaseClient
+    .from("applications")
+    .select(`
+        *,
+        applicants (
+            *,
+            documents (*)
+        )
+    `)
+    .eq(
+        "id",
+        id
+    )
+    .single();
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
+
+    let html=`
+
+        <div class="action-row">
+            <button type="button" class="btn btn-primary" onclick="printApplication('${escJS(app.id)}')">🖨️ Print A4 Application</button>
+            <button type="button" class="btn btn-secondary" onclick="printReceipt('${escJS(app.id)}')">🧾 Print Receipt</button>
+            <button type="button" class="btn btn-secondary" onclick="printFamilyApplication('${escJS(app.id)}')">👨‍👩‍👧‍👦 Family Print</button>
+        </div>
+
+        <div class="process-timeline" style="margin-bottom:25px">
+            ${buildProcessSteps(app.status)}
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Family ID</label>
+                <input
+                    readonly
+                    value="${esc(app.family_id)}"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <div style="padding-top:10px">
+                    ${statusBadge(app.status)}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Visa Center</label>
+                <input
+                    readonly
+                    value="${esc(app.visa_center || "-")}"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Appointment</label>
+                <input
+                    readonly
+                    value="${esc(
+                        `${app.slot_date || "-"} ${app.slot_time || ""}`
+                    )}"
+                >
+            </div>
+
+        </div>
+
+        <h3 style="margin:25px 0 15px">
+            Applicants
+        </h3>
+
+    `;
+
+
+    (app.applicants || [])
+    .forEach(
+        (member,index)=>{
+
+            html+=`
+
+                <div class="member-card">
+
+                    <h3 style="margin-bottom:15px">
+                        Member ${index+1} —
+                        ${esc(member.name)}
+                    </h3>
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>Passport</label>
+                            <input
+                                readonly
+                                value="${esc(member.passport)}"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input
+                                readonly
+                                value="${esc(member.dob || "-")}"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Mobile</label>
+                            <input
+                                readonly
+                                value="${esc(member.mobile || "-")}"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Visa Type</label>
+                            <input
+                                readonly
+                                value="${esc(member.visa_type || "-")}"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div style="margin-top:15px">
+
+                        <strong>
+                            Documents
+                        </strong>
+
+                        ${
+                            member.documents?.length
+                            ?
+                            member.documents.map(
+                                doc=>`
+
+                                <div class="file-item">
+
+                                    <span>
+                                        📄
+                                        ${esc(doc.file_name)}
+                                    </span>
+
+                                    <button
+                                        class="btn btn-primary btn-small"
+                                        onclick="
+                                        downloadDocument(
+                                            '${doc.storage_path}',
+                                            '${escJS(doc.file_name)}'
+                                        )"
+                                    >
+                                        View / Download
+                                    </button>
+
+                                </div>
+
+                                `
+                            ).join("")
+                            :
+                            `
+                            <p style="
+                                color:#667085;
+                                font-size:12px;
+                                margin-top:8px
+                            ">
+                                No documents.
+                            </p>
+                            `
+                        }
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    html+=`
+
+        <div class="form-group">
+
+            <label>Notes</label>
+
+            <textarea readonly>${esc(
+                app.notes || ""
+            )}</textarea>
+
+        </div>
+
+    `;
+
+
+    document
+    .getElementById("detailsContent")
+    .innerHTML=html;
+
+
+    document
+    .getElementById("detailsModal")
+    .classList.add("show");
+
+}
+
+
+
+/* =====================================================
+   PRINT / RECEIPT / PROCESS HELPERS
+===================================================== */
+const PROCESS_STATUSES=["Pending","Documents Uploaded","Application Submitted","Slot Requested","Slot Confirmed","Completed"];
+
+function processIndex(status){
+    const i=PROCESS_STATUSES.indexOf(status||"Pending");
+    return i<0?0:i;
+}
+function buildProcessSteps(status){
+    const current=processIndex(status);
+    const labels=[
+        ["Registration","Create application"],
+        ["Documents","Documents uploaded"],
+        ["Submitted","Application submitted"],
+        ["Slot Requested","Slot request recorded"],
+        ["Slot Confirmed","Appointment confirmed"],
+        ["Completed","Process completed"]
+    ];
+    return labels.map((x,i)=>{
+        const cls=i<current?"process-step done":i===current?"process-step active":"process-step";
+        return `<div class="${cls}"><div class="step-no">${i+1}</div><strong>${esc(x[0])}</strong><small>${esc(x[1])}</small></div>`;
+    }).join("");
+}
+function printShell(title,body){
+    const win=window.open("","_blank","width=900,height=900");
+    if(!win){toast("Please allow pop-ups to print.");return;}
+    win.document.write(`<!doctype html><html><head><meta charset="UTF-8"><title>${esc(title)}</title>
+<style>
+@page{size:A4;margin:12mm}*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:#172033;font-size:12px;line-height:1.45;margin:0}
+.header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #2563eb;padding-bottom:12px;margin-bottom:16px}
+.brand h1{font-size:20px;margin:0;color:#1d4ed8}.brand p{margin:3px 0;color:#667085}.meta{font-size:11px;color:#667085;text-align:right}
+.title{font-size:17px;font-weight:700;margin:14px 0}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.field{border:1px solid #e5e7eb;border-radius:6px;padding:8px}.field label{display:block;font-size:10px;color:#667085;margin-bottom:2px}.field strong{font-size:12px}
+.card{border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin:10px 0;page-break-inside:avoid}.card h3{margin:0 0 9px;font-size:14px}
+table{width:100%;border-collapse:collapse;margin-top:8px}th,td{border:1px solid #d1d5db;padding:6px;text-align:left;vertical-align:top}th{background:#f3f4f6;font-size:10px}
+.footer{display:flex;justify-content:space-between;margin-top:35px;padding-top:12px;border-top:1px solid #d1d5db}.signature{margin-top:35px;text-align:center;width:190px;border-top:1px solid #111;padding-top:5px}
+.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#eef2ff;color:#1d4ed8;font-weight:700}.note{white-space:pre-wrap}.small{font-size:10px;color:#667085}
+</style></head><body><div id="printArea">${body}</div>
+<script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script></body></html>`);
+    win.document.close();
+}
+async function fetchApplicationForPrint(id){
+    const {data:app,error}=await supabaseClient.from("applications").select(`*, applicants (*, documents (*))`).eq("id",id).single();
+    if(error){toast(error.message);return null} return app;
+}
+function applicationPrintBody(app){
+    const members=(app.applicants||[]);
+    const rows=members.map((m,i)=>`
+        <div class="card">
+            <h3>Applicant ${i+1}: ${esc(m.name||"-")}</h3>
+            <div class="grid">
+                <div class="field"><label>Full Name</label><strong>${esc(m.name||"-")}</strong></div>
+                <div class="field"><label>Passport Number</label><strong>${esc(m.passport||"-")}</strong></div>
+                <div class="field"><label>Date of Birth</label><strong>${esc(m.dob||"-")}</strong></div>
+                <div class="field"><label>Mobile</label><strong>${esc(m.mobile||"-")}</strong></div>
+                <div class="field"><label>Email</label><strong>${esc(m.email||"-")}</strong></div>
+                <div class="field"><label>Visa Type</label><strong>${esc(m.visa_type||"-")}</strong></div>
+            </div>
+            <strong>Documents:</strong>
+            ${m.documents?.length?`<ul>${m.documents.map(d=>`<li>${esc(d.file_name||"Document")}</li>`).join("")}</ul>`:`<span class="small"> No documents uploaded.</span>`}
+        </div>`).join("");
+    return `
+        <div class="header"><div class="brand"><h1>Next Step India</h1><p>Indian Visa Slot Booking & Management System</p></div>
+        <div class="meta">Application ID: ${esc(app.id||"-")}<br>Generated: ${esc(new Date().toLocaleString())}</div></div>
+        <div class="title">Visa Application Form</div>
+        <div class="grid">
+            <div class="field"><label>Family ID</label><strong>${esc(app.family_id||"-")}</strong></div>
+            <div class="field"><label>Status</label><span class="badge">${esc(app.status||"Pending")}</span></div>
+            <div class="field"><label>Visa Center</label><strong>${esc(app.visa_center||"-")}</strong></div>
+            <div class="field"><label>Appointment Date</label><strong>${esc(app.slot_date||"-")}</strong></div>
+            <div class="field"><label>Appointment Time</label><strong>${esc(app.slot_time||"-")}</strong></div>
+            <div class="field"><label>Total Applicants</label><strong>${members.length}</strong></div>
+        </div>
+        <div class="title">Applicants</div>${rows||`<div class="card">No applicants found.</div>`}
+        <div class="card"><h3>Notes</h3><div class="note">${esc(app.notes||"No notes.")}</div></div>
+        <div class="footer"><div><strong>Next Step India</strong><br><span class="small">Indian Visa Slot Booking & Applicant Management</span></div><div class="signature">Authorized Signature</div></div>`;
+}
+async function prepareAndPrint(id,title){const app=await fetchApplicationForPrint(id);if(app)printShell(title,applicationPrintBody(app))}
+function receiptBody(app){
+    const members=app.applicants||[];
+    return `<div class="header"><div class="brand"><h1>Next Step India</h1><p>Indian Visa Slot Booking</p></div>
+    <div class="meta"><strong>OFFICIAL RECEIPT</strong><br>Date: ${esc(new Date().toLocaleDateString())}</div></div>
+    <div class="title">Application / Service Receipt</div>
+    <div class="grid">
+        <div class="field"><label>Family ID</label><strong>${esc(app.family_id||"-")}</strong></div>
+        <div class="field"><label>Status</label><span class="badge">${esc(app.status||"Pending")}</span></div>
+        <div class="field"><label>Visa Center</label><strong>${esc(app.visa_center||"-")}</strong></div>
+        <div class="field"><label>Appointment</label><strong>${esc((app.slot_date||"-")+" "+(app.slot_time||""))}</strong></div>
+    </div>
+    <table><thead><tr><th>#</th><th>Applicant Name</th><th>Passport</th><th>Visa Type</th></tr></thead><tbody>
+    ${members.map((m,i)=>`<tr><td>${i+1}</td><td>${esc(m.name||"-")}</td><td>${esc(m.passport||"-")}</td><td>${esc(m.visa_type||"-")}</td></tr>`).join("")}
+    </tbody></table>
+    <div class="card"><strong>Important:</strong> This receipt confirms the application/service record in the Next Step India management system. It is not an Indian government visa, appointment confirmation, or guarantee of visa issuance.</div>
+    <div class="footer"><div><strong>Next Step India</strong><br><span class="small">Authorized service / consultancy record</span></div><div class="signature">Authorized Signature</div></div>`;
+}
+async function prepareAndPrintReceipt(id){const app=await fetchApplicationForPrint(id);if(app)printShell("Next Step India Receipt",receiptBody(app))}
+function printApplication(id){prepareAndPrint(id,"Indian Visa Application")}
+function printFamilyApplication(id){prepareAndPrint(id,"Family Indian Visa Application")}
+function printReceipt(id){prepareAndPrintReceipt(id)}
+
+
+function closeModal(){
+
+    document
+    .getElementById("detailsModal")
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+DOWNLOAD / VIEW PRIVATE PDF
+===================================================== */
+
+async function downloadDocument(
+    path,
+    fileName
+){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .storage
+    .from("visa-documents")
+    .createSignedUrl(
+        path,
+        300
+    );
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
+
+    window.open(
+        data.signedUrl,
+        "_blank"
+    );
+
+}
+
+
+/* =====================================================
+EDIT
+===================================================== */
+
+async function editApplication(id){
+
+    const {
+        data:app,
+        error
+    } =
+    await supabaseClient
+    .from("applications")
+    .select(`
+        *,
+        applicants (
+            *,
+            documents (*)
+        )
+    `)
+    .eq(
+        "id",
+        id
+    )
+    .single();
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+
+    }
+
+
+    resetForm();
+
+
+    document
+    .getElementById("editingId")
+    .value=app.id;
+
+
+    document
+    .getElementById("familyIdDisplay")
+    .textContent=app.family_id;
+
+
+    document
+    .getElementById("formTitle")
+    .textContent=
+        "Edit Application";
+
+
+    document
+    .getElementById("visaCenter")
+    .value=
+        app.visa_center || "";
+
+
+    document
+    .getElementById("slotDate")
+    .value=
+        app.slot_date || "";
+
+
+    document
+    .getElementById("slotTime")
+    .value=
+        app.slot_time || "";
+
+
+    document
+    .getElementById("status")
+    .value=
+        app.status || "Pending";
+
+
+    document
+    .getElementById("notes")
+    .value=
+        app.notes || "";
+
+
+    const radio =
+        document
+        .querySelector(
+            `input[name="applicationType"][value="${app.application_type}"]`
+        );
+
+
+    if(radio){
+
+        radio.checked=true;
+
+    }
+
+
+    changeType(
+        app.application_type
+    );
+
+
+    members=[];
+
+    selectedFiles={};
+
+
+    (app.applicants || [])
+    .forEach(
+        member=>{
+
+            const id =
+                crypto.randomUUID();
+
+
+            members.push({
+
+                id:id,
+
+                name:member.name,
+
+                passport:member.passport,
+
+                dob:member.dob || "",
+
+                mobile:member.mobile || "",
+
+                email:member.email || "",
+
+                visa_type:member.visa_type || "",
+
+                existingId:member.id,
+
+                documents:
+                    member.documents || []
+
+            });
+
+
+            selectedFiles[id]=[];
+
+        }
+    );
+
+
+    renderMembers();
+
+
+    showSection(
+        "addApplication",
+        document
+        .querySelectorAll(".nav button")[2]
+    );
+
+}
+
+
+/* =====================================================
+DELETE
+===================================================== */
+
+async function deleteApplication(id){
+
+    if(
+        !confirm(
+            "Delete this application and all applicants?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const {
+        data:app
+    } =
+    await supabaseClient
+    .from("applications")
+    .select(`
+        *,
+        applicants (
+            documents (*)
+        )
+    `)
+    .eq(
+        "id",
+        id
+    )
+    .single();
+
+
+    try{
+
+        const paths=[];
+
+
+        (app.applicants || [])
+        .forEach(
+            member=>{
+
+                (member.documents || [])
+                .forEach(
+                    doc=>
+                    paths.push(
+                        doc.storage_path
+                    )
+                );
+
+            }
+        );
+
+
+        if(paths.length){
+
+            await supabaseClient
+            .storage
+            .from("visa-documents")
+            .remove(paths);
+
+        }
+
+
+        const {
+            error
+        } =
+        await supabaseClient
+        .from("applications")
+        .delete()
+        .eq(
+            "id",
+            id
+        );
+
+
+        if(error)
+            throw error;
+
+
+        toast(
+            "Application deleted."
+        );
+
+
+        await refreshDashboard();
+
+        await renderApplications();
+
+
+    }catch(error){
+
+        toast(error.message);
+
+    }
+
+}
+
+
+/* =====================================================
+DASHBOARD
+===================================================== */
+
+async function refreshDashboard(){
+
+    const applications =
+        await getApplications();
+
+
+    const families =
+        applications.length;
+
+
+    const applicants =
+        applications.reduce(
+            (sum,app)=>
+            sum+
+            (app.applicants?.length || 0),
+            0
+        );
+
+
+    const pending =
+        applications.filter(
+            a=>a.status==="Pending"
+        ).length;
+
+
+    const uploaded =
+        applications.filter(
+            a=>
+            a.status==="Documents Uploaded"
+        ).length;
+
+
+    const requested =
+        applications.filter(
+            a=>
+            a.status==="Slot Requested"
+        ).length;
+
+
+    const completed =
+        applications.filter(
+            a=>
+            a.status==="Completed"
+        ).length;
+
+
+    document
+    .getElementById("familyCount")
+    .textContent=families;
+
+
+    document
+    .getElementById("applicantCount")
+    .textContent=applicants;
+
+
+    document
+    .getElementById("pendingCount")
+    .textContent=pending;
+
+
+    document
+    .getElementById("uploadedCount")
+    .textContent=uploaded;
+
+
+    document
+    .getElementById("slotCount")
+    .textContent=requested;
+
+
+    document
+    .getElementById("completedCount")
+    .textContent=completed;
+
+
+    const recent =
+        applications.slice(0,10);
+
+
+    const table =
+        document
+        .getElementById("recentTable");
+
+
+    table.innerHTML="";
+
+
+    if(!recent.length){
+
+        table.innerHTML=`
+
+            <tr>
+                <td colspan="6">
+                    <div class="empty">
+                        No applications yet.
+                    </div>
+                </td>
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    recent.forEach(
+        app=>{
+
+            const main =
+                app.applicants?.[0];
+
+
+            const tr =
+                document.createElement("tr");
+
+
+            tr.innerHTML=`
+
+                <td>
+                    <strong>
+                        ${esc(app.family_id)}
+                    </strong>
+                </td>
+
+                <td>
+                    ${esc(main?.name || "-")}
+                </td>
+
+                <td>
+                    ${app.applicants?.length || 0}
+                </td>
+
+                <td>
+                    ${esc(main?.visa_type || "-")}
+                </td>
+
+                <td>
+                    ${esc(app.slot_date || "-")}
+                    ${esc(app.slot_time || "")}
+                </td>
+
+                <td>
+                    ${statusBadge(app.status)}
+                </td>
+
+            `;
+
+
+            table.appendChild(tr);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+RESET
+===================================================== */
+
+function resetForm(){
+
+    document
+    .getElementById("applicationForm")
+    .reset();
+
+
+    document
+    .getElementById("editingId")
+    .value="";
+
+
+    document
+    .getElementById("formTitle")
+    .textContent=
+        "New Visa Application";
+
+
+    document
+    .getElementById("familyIdDisplay")
+    .textContent=
+        "New Application";
+
+
+    members=[];
+
+    selectedFiles={};
+
+
+    document
+    .querySelector(
+        'input[name="applicationType"][value="Individual"]'
+    )
+    .checked=true;
+
+
+    changeType(
+        "Individual"
+    );
+
+
+    addMember();
+
+}
+
+
+/* =====================================================
+UTILITIES
+===================================================== */
+
+function value(id){
+
+    return document
+        .getElementById(id)
+        .value
+        .trim();
+
+}
+
+
+function generateFamilyId(){
+
+    const d =
+        new Date();
+
+
+    const date =
+        d.getFullYear()+
+        String(d.getMonth()+1)
+        .padStart(2,"0")+
+        String(d.getDate())
+        .padStart(2,"0");
+
+
+    const random =
+        Math.floor(
+            100000+
+            Math.random()*900000
+        );
+
+
+    return `FAM-${date}-${random}`;
+
+}
+
+
+function safeFileName(name){
+
+    return name
+        .replace(/[^a-zA-Z0-9._-]/g,"_");
+
+}
+
+
+function statusBadge(status){
+
+    const map={
+
+        "Pending":"pending",
+
+        "Documents Uploaded":
+            "uploaded",
+
+        "Application Submitted":
+            "submitted",
+
+        "Slot Requested":
+            "requested",
+
+        "Slot Confirmed":
+            "confirmed",
+
+        "Completed":
+            "completed"
+
+    };
+
+
+    return `
+
+        <span class="status ${map[status] || "pending"}">
+            ${esc(status || "Pending")}
+        </span>
+
+    `;
+
+}
+
+
+function esc(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+function escJS(value){
+
+    return String(value ?? "")
+        .replaceAll("\\","\\\\")
+        .replaceAll("'","\\'");
+
+}
+
+
+function toast(message){
+
+    const el =
+        document
+        .getElementById("toast");
+
+
+    el.textContent=message;
+
+
+    el.classList.add("show");
+
+
+    setTimeout(
+        ()=>
+        el.classList.remove("show"),
+        3500
+    );
+
+}
+
+
+/* CLOSE MODAL OUTSIDE */
+
+document
+.getElementById("detailsModal")
+.addEventListener(
+    "click",
+    event=>{
+
+        if(
+            event.target.id===
+            "detailsModal"
+        ){
+
+            closeModal();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
